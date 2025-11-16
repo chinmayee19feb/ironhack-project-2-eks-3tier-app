@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: chinmayee-postgres-pvc
+  namespace: chinmayee
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: gp2
+  # specify storageClassName if required by your cluster, e.g. "gp2" or "standard"
+  # storageClassName: gp2

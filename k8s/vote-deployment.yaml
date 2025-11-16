@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment                    # defines a Deployment resource
+metadata:
+  name: chinmayee-deployment-vote     # name of the deployment
+  namespace: chinmayee           # namespace where the deployment will be created (for learning)
+  labels:
+    app: chinmayee-vote               # label to identify the application
+spec:
+  replicas: 2                           # run 2 pods for basic redundancy 
+  selector:
+    matchLabels:
+      app: chinmayee-vote
+  template:
+    metadata:
+      labels:
+        app: chinmayee-vote
+    spec:
+      containers:
+        - name: vote
+          image: chinmayee606/vote:latest   # replace with your Docker Hub username
+          ports:
+            - containerPort: 80
+          env:
+            - name: REDIS_HOST
+              value: "chinmayee-svc-redis"
+            - name: REDIS_PORT
+              value: "6379"           # default Redis port
+          resources:               # resource requests and limits
+            requests:
+              cpu: 100m           # request 100 millicores of CPU
+              memory: 128Mi      # request 128Mi of memory
+            limits:
+              cpu: 500m          # limit to 500 millicores of CPU
+              memory: 256Mi   # limit to 256Mi of memory

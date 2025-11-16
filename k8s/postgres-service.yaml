@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: chinmayee-svc-postgres
+  namespace: chinmayee
+spec:
+  selector:
+    app: chinmayee-postgres
+  ports:
+    - port: 5432
+      targetPort: 5432
+  type: ClusterIP
+              # default service type Exposes your postgres pods inside the cluster as chinmayee-svc-postgres:5432
+                      #Keeps it internal (ClusterIP). Only other pods inside the cluster (e.g., the result app) can access it.

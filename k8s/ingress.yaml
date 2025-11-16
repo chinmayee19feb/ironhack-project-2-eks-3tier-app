@@ -1,0 +1,57 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  #name: chinmayee-ingress
+  name: chinmayee-ingress-websocket
+  namespace: chinmayee
+  annotations:
+    #kubernetes.io/ingress.class: chinmayee-nginx
+    # kubernetes.io/ingress.class: nginx
+    kubernetes.io/ingress.class: "nginx-websocket"
+    # nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    # nginx.ingress.kubernetes.io/proxy-send-timeout: "2600"
+    # nginx.ingress.kubernetes.io/websocket-services: "chinmayee-svc-result"
+    # nginx.org/rewrites: "serviceName=chinmayee-svc-result rewrite=/"
+    nginx.ingress.kubernetes.io/websocket-services: "chinmayee-svc-result"
+    nginx.ingress.kubernetes.io/proxy-set-header: "Upgrade $http_upgrade"
+    nginx.ingress.kubernetes.io/proxy-set-header: "Connection $connection_upgrade"
+
+spec:
+  #ingressClassName: "chinmayee-nginx"
+  # ingressClassName: nginx
+  ingressClassName: nginx-websocket
+  rules:
+  - host: vote.app.chin.diogohack.shop
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: chinmayee-svc-vote
+            port:
+              number: 80
+  - host: result.app.chin.diogohack.shop
+    http:
+      paths:
+      - path: /result/socket.io
+        pathType: Prefix
+        backend:
+          service:
+            name: chinmayee-svc-result
+            port:
+              number: 80
+      - path: /socket.io
+        pathType: Prefix
+        backend:
+          service:
+            name: chinmayee-svc-result
+            port:
+              number: 80      
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: chinmayee-svc-result
+            port:
+              number: 80

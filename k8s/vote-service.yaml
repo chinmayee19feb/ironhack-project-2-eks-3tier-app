@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: chinmayee-svc-vote
+  namespace: chinmayee
+  labels:
+    app: chinmayee-vote
+spec:
+  selector:
+    app: chinmayee-vote
+  ports:
+    - port: 80
+      targetPort: 80
+  type: ClusterIP               # default service type Exposes your vote pods inside the cluster as chinmayee-svc-vote:80
+                      #Keeps it internal (ClusterIP). Ingress will be used to expose it externally.

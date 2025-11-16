@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chinmayee-deployment-redis
+  namespace: chinmayee
+  labels:
+    app: chinmayee-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chinmayee-redis
+  template:
+    metadata:
+      labels:
+        app: chinmayee-redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:6-alpine
+          args: ["redis-server", "--save", "60", "1", "--appendonly", "yes"]
+          ports:
+            - containerPort: 6379

@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chinmayee-deployment-result
+  namespace: chinmayee
+  labels:
+    app: chinmayee-result
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: chinmayee-result
+  template:
+    metadata:
+      labels:
+        app: chinmayee-result
+    spec:
+      containers:
+      - name: result
+        image: chinmayee606/result:latest
+        ports:
+        - containerPort: 80
+
+        # environment variables
+        env:
+        - name: PORT
+          value: "80"
+        - name: PG_HOST
+          value: "chinmayee-svc-postgres"
+        - name: PG_PORT
+          value: "5432"
+        - name: PG_USER
+          value: "postgres"
+        - name: PG_PASSWORD
+          value: "postgres"
+        - name: PG_DATABASE
+          value: "postgres"
+
+        # Health checks
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10
+
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 20
+
+        # resources (medium web app)
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "256Mi"
+          limits:
+            cpu: "1"
+            memory: "512Mi"
